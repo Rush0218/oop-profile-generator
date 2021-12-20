@@ -4,12 +4,12 @@ const inquirer = require('inquirer');
 
 
 //js team profiles 
-const Engineer = require('./Employee.js');
-const Intern = require('./Intern.js');
-const Manager = require('./Manager.js');
+const Engineer = require('./lib/Employee');
+const Intern = require('./lib/Intern');
+const Manager = require('./lib/Manager');
 
 //html page
-const Html = require('src/generateHTML.js');
+const generateHTML = require('./src/generateHTML.js');
 
 
 const teamArr = [];
@@ -25,7 +25,7 @@ const addEmployee = () => {
         {
             type: 'list',
             name: 'role',
-            message: 'Pleae choose your role.',
+            message: 'Please choose your role.',
             choices: ['Engineer', 'Intern', 'Manager']
         },
         {
@@ -70,7 +70,7 @@ const addEmployee = () => {
         {
             type: 'input',
             name: 'github',
-            message: "Please enter the employee's GitHub username.",
+            message: "Please enter the engineer's GitHub username.",
             when: (input) => input.role === 'Engineer',
             validate: inputGithub => {
                 if (inputGithub) {
@@ -83,8 +83,8 @@ const addEmployee = () => {
         },
         {
             type: 'input',
-            name: 'school',
-            message: "Please enter the employee's GitHub username.",
+            name: 'university',
+            message: "Please enter the intern's university.",
             when: (input) => input.role === 'Intern',
             validate: inputSchool => {
                 if (inputSchool) {
@@ -98,7 +98,7 @@ const addEmployee = () => {
         {
             type: 'input',
             name: 'office',
-            message: "Please enter the employee's office number if manager role.",
+            message: "Please enter the manager's office number.",
             when: (input) => input.role === 'Manager',
             validate: inputOffice => {
                 if (inputOffice) {
@@ -119,20 +119,22 @@ const addEmployee = () => {
 
     ])
         .then(data => {
-            let(names, id, email, role, github, university, officeNum) = data;
+            let { role, name, id, email, github, university, office, confirmEmployee } = data;
             let employee;
 
-            if (role === 'Engineer') {
-                employee = new Engineer(names, id, email, github);
+            if (role === 'Intern') {
+                employee = new Intern(name, id, email, university);
+                teamArr.push(employee)
                 console.log(employee);
-            } else if (role === 'Intern') {
-                employee = new Intern(names, id, email, university);
+            } else if (role === 'Engineer') {
+                employee = new Engineer(name, id, email, github);
+                teamArr.push(employee);
                 console.log(employee);
-            } else if (role === 'Manager') {
-                employee = new Manager(names, id, emial, officeNum);
+            } else {
+                employee = new Manager(name, id, email, office);
+                teamArr.push(employee);
                 console.log(employee);
             }
-            teamArr.push(employee);
 
             if (confirmEmployee) {
                 return addEmployee(teamArr);
@@ -143,7 +145,7 @@ const addEmployee = () => {
 };
 
 //creat file with fs module
-const generateFile = data => {
+const writeFile = data => {
     fs.writeFile('dist/index.html', data, err => {
         if (err) {
             console.log(err);
@@ -152,5 +154,15 @@ const generateFile = data => {
             console.log("All team profiles have been successfully generated!")
         }
     })
-    return generateFile;
-}; 
+};
+
+addEmployee()
+    .then(teamArr => {
+        return generateHTML(teamArr)
+    })
+    .then(pageHTML => {
+        return writeFile(pageHTML);
+    })
+    .catch(err => {
+        console.log(err)
+    }); 

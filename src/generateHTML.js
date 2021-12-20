@@ -1,7 +1,7 @@
 //generate engineer card
 const generateEngineer = function (engineer) {
     return `
-    <div class="col-3 mt-3">
+    <div class="col-4 mt-3">
         <div class="card h-100">
             <div class="card-header">
                 <h3>${engineer.name}</h3>
@@ -20,11 +20,11 @@ const generateEngineer = function (engineer) {
 //generate intern card
 const generateIntern = function (intern) {
     return `
-    <div class="col-3 mt-3">
+    <div class="col-4 mt-3">
         <div class="card h-100">
             <div class="card-header">
                 <h3>${intern.name}</h3>
-                <h4>Engineer</h4><i class="material-icons">school</i>
+                <h4>Intern</h4><i class="material-icons">school</i>
             </div>
             <div class="card-body">
                 <p class="id">ID: ${intern.id}</p>
@@ -40,11 +40,11 @@ const generateIntern = function (intern) {
 //generate manager card
 const generateManager = function (manager) {
     return `
-    <div class="col-3 mt-3">
+    <div class="col-4 mt-3">
         <div class="card h-100">
             <div class="card-header">
                 <h3>${manager.name}</h3>
-                <h4>Engineer</h4><i class="material-icons">supervisor_account</i>
+                <h4>Manager</h4><i class="material-icons">supervisor_account</i>
             </div>
             <div class="card-body">
                 <p class="id">ID: ${manager.id}</p>
@@ -73,7 +73,7 @@ const generatePage = function (employees) {
         <body>
             <header>
                 <nav class="navbar" id="navbar">
-                    <span class="navbar-title mb-0 h1 w-100 text-center" id="navbar-text">Team Profile</span>
+                    <span class="navbar-title mb-0 h1 w-100 text-center" id="navbar-text">Team</span>
                 </nav>
             </header>
             <main>
@@ -99,9 +99,9 @@ generateHTML = (data) => {
     //create an array for each team container
     dataArr = [];
 
-    for (var i = 0; i < data.length; i++) {
+    for (let i = 0; i < data.length; i++) {
         const employee = data[i];
-        const role = employee.getRole();
+        const role = employee.inputRole();
 
         //team member functions
         if (role === 'Engineer') {
