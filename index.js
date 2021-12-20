@@ -4,7 +4,7 @@ const inquirer = require('inquirer');
 
 
 //js team profiles 
-const Engineer = require('./lib/Employee');
+const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
 const Manager = require('./lib/Manager');
 
